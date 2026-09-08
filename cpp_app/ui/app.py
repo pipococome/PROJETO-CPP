@@ -761,8 +761,6 @@ class MainWindow(QMainWindow):
         self.update_price_table_button = QPushButton("Atualizar tabela de preços")
         self.update_price_table_button.setObjectName("primaryButton")
         self.update_price_table_button.clicked.connect(self.update_price_table)
-        # Somente usuarios com classe admin podem ver e usar este botao.
-        self.update_price_table_button.setVisible(self.user.role == "admin")
 
         layout.addRow(self.update_price_table_button)
 
@@ -827,16 +825,6 @@ class MainWindow(QMainWindow):
         return group
 
     def update_price_table(self):
-        # Protecao extra: mesmo que o botao esteja escondido, garante que
-        # apenas admin execute a atualizacao.
-        if self.user.role != "admin":
-            QMessageBox.warning(
-                self,
-                "Acesso negado",
-                "Apenas administradores podem atualizar a tabela de preços.",
-            )
-            return
-
         if not Path(PRICE_TABLE_PATH).exists():
             QMessageBox.warning(
                 self,
