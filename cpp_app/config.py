@@ -24,7 +24,14 @@ EXPORT_DIR.mkdir(exist_ok=True)
 if load_dotenv:
     load_dotenv(BASE_DIR / ".env")
 
-DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DATA_DIR / 'cpp.db'}")
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise RuntimeError(
+        "DATABASE_URL nao foi encontrada. Crie um arquivo .env na mesma pasta "
+        "do CPP.exe (ou do projeto, em modo desenvolvimento) com a linha:\n"
+        "DATABASE_URL=postgresql+psycopg://usuario:senha@host:5432/cpp\n"
+        "O sistema usa exclusivamente PostgreSQL; nao ha suporte a SQLite."
+    )
 PRICE_TABLE_PATH = os.getenv(
     "PRICE_TABLE_PATH",
     str(Path.home() / "Downloads" / "TABELA PARTICULARES-(Atualização 24-03-2026).xlsx"),
@@ -33,4 +40,3 @@ REPORT_TEMPLATE_PATH = os.getenv(
     "REPORT_TEMPLATE_PATH",
     str(Path.home() / "Downloads" / "PLANILHA VALORES NAO COBRADO PA.xlsx"),
 )
-
