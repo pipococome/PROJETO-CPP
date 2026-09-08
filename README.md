@@ -48,12 +48,6 @@ REPORT_TEMPLATE_PATH=C:\caminho\para\PLANILHA VALORES NAO COBRADO PA.xlsx
 python -m cpp_app
 ```
 
-O primeiro acesso padrão é:
-- Usuário: `admin`
-- Senha: `admin123`
-
-> Troque a senha do usuário `admin` assim que possível — ela vem fixa no primeiro acesso.
-
 ## Observações
 
 - O projeto usa exclusivamente PostgreSQL; a variável `DATABASE_URL` deve estar sempre configurada no `.env` apontando para o banco.
