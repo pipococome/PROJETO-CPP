@@ -1693,6 +1693,44 @@ class MainWindow(QMainWindow):
         del self.pending_exams[row]
         self._refresh_pending_exams_table()
 
+    def delete_patient_record(self, attendance):
+        patient_name = attendance.patient_name
+
+        related_ids = [
+            item.id for item in self.current_rows
+            if item.patient_name == patient_name
+        ]
+        if attendance.id not in related_ids:
+            related_ids.append(attendance.id)
+
+        quantidade = len(related_ids)
+        plural = "exame" if quantidade == 1 else "exames"
+
+        confirm = QMessageBox.question(
+            self,
+            "Excluir registro do paciente",
+            f"Tem certeza que deseja excluir o registro de '{patient_name}' por completo?\n\n"
+            f"Isso vai apagar {quantidade} {plural} permanentemente. Essa acao nao pode ser desfeita.",
+        )
+        if confirm != QMessageBox.StandardButton.Yes:
+            return
+
+        try:
+            for attendance_id in related_ids:
+                delete_attendance(attendance_id)
+        except ValueError as exc:
+            QMessageBox.warning(self, "Erro ao excluir", str(exc))
+            return
+
+        self.refresh_table()
+        self.load_report_preview()
+
+        QMessageBox.information(
+            self,
+            "Registro excluido",
+            f"O registro de '{patient_name}' foi excluido com sucesso.",
+        )
+
     def start_edit_attendance(self, attendance):
         self.editing_mode = True
         self.editing_attendance_id = attendance.id
@@ -2007,10 +2045,17 @@ class MainWindow(QMainWindow):
                 lambda checked=False, attendance=self.current_rows[row_index]: self.start_edit_attendance(attendance)
             )
 
+            delete_button = QPushButton("Excluir")
+            delete_button.setObjectName("dangerButton")
+            delete_button.clicked.connect(
+                lambda checked=False, attendance=self.current_rows[row_index]: self.delete_patient_record(attendance)
+            )
+
             button_container = QWidget()
             button_layout = QHBoxLayout(button_container)
             button_layout.setContentsMargins(10, 6, 10, 6)
             button_layout.addWidget(edit_button)
+            button_layout.addWidget(delete_button)
 
             self.table.setCellWidget(row_index, 11, button_container)
 
