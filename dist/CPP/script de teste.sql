@@ -6,3 +6,6 @@ ORDER BY table_name;
 
 SELECT *
 FROM attendances;
+
+SELECT *
+FROM users;
