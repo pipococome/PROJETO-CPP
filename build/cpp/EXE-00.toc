@@ -73,7 +73,7 @@
  [],
  False,
  False,
- 1788911348,
+ 1788981582,
  [('runw.exe',
    'C:\\Users\\barbi\\Downloads\\PROJETO-CPP\\.venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\runw.exe',
    'EXECUTABLE')],
