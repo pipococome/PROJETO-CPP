@@ -353,6 +353,9 @@ def export_pdf(attendances, filename: str = "relatorio_atendimentos.pdf") -> Pat
         ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
         ("FONTSIZE", (0, 0), (-1, -1), 8),
         ("BACKGROUND", (0, 1), (-1, -1), colors.white),
+        # Nome do paciente sempre centralizado, tenha ele 1 exame ou varios.
+        ("ALIGN", (0, 1), (0, -1), "CENTER"),
+        ("VALIGN", (0, 1), (0, -1), "MIDDLE"),
     ]
 
     row_index = 1  # linha 0 e o cabecalho
@@ -366,12 +369,6 @@ def export_pdf(attendances, filename: str = "relatorio_atendimentos.pdf") -> Pat
         if span > 0:
             table_style_commands.append(
                 ("SPAN", (0, row_index), (0, row_index + span))
-            )
-            table_style_commands.append(
-                ("VALIGN", (0, row_index), (0, row_index + span), "MIDDLE")
-            )
-            table_style_commands.append(
-                ("ALIGN", (0, row_index), (0, row_index + span), "CENTER")
             )
         row_index += span + 1
         i = j + 1

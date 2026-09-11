@@ -1996,6 +1996,13 @@ class MainWindow(QMainWindow):
             patient_max_id[item.patient_name] = max(patient_max_id.get(item.patient_name, 0), item.id)
         self.current_rows.sort(key=lambda item: (-patient_max_id[item.patient_name], -item.id))
 
+        # Remove os widgets de botao (Editar/Excluir) das linhas atuais antes de
+        # recriar a tabela. O QTableWidget nao limpa esses widgets sozinho ao
+        # trocar o conteudo, e isso causava botoes corrompidos/sobrepostos
+        # visualmente quando o agrupamento por paciente mudava entre pesquisas.
+        for old_row in range(self.table.rowCount()):
+            self.table.removeCellWidget(old_row, 11)
+
         self.table.setRowCount(len(self.current_rows))
         for row_index, item in enumerate(self.current_rows):
             report_month = item.report_month or item.attendance_date.month
